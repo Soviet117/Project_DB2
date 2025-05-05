@@ -129,7 +129,7 @@
             btnSeleccionar.textContent = 'Seleccionar';
             btnSeleccionar.className = 'btn-seleccionar';
             btnSeleccionar.onclick = function() {
-                // Agregar a seleccionados y eliminar de disponibles
+                // agregar a seleccionados y eliminar de disponibles
                 seleccionarHorario(horario);
             };
             celdaAcciones.appendChild(btnSeleccionar);
@@ -190,16 +190,14 @@
                 return;
             }
             
-            // Aquí implementarías la lógica para enviar los cursos seleccionados al servidor
-            // Por ejemplo:
+            
             const cursosIds = horariosSeleccionados.map(h => h.id_curso);
             
             alert("Completando matrícula para los cursos: " + 
                   horariosSeleccionados.map(h => h.nombreC).join(", ") + 
                   "\nIDs: " + cursosIds.join(", "));
             
-            // Aquí implementarías el fetch para enviar los datos al servidor
-            /*
+            
             fetch('${pageContext.request.contextPath}/controllerDataMatricularse/matricular', {
                 method: 'POST',
                 headers: {
@@ -216,22 +214,21 @@
             })
             .then(result => {
                 alert("Matrícula completada con éxito!");
-                // Reiniciar seleccionados
+                
                 horariosSeleccionados = [];
-                // Recargar horarios disponibles
+                
                 loadHorarios();
             })
             .catch(error => {
                 console.error("Error al procesar la matrícula:", error);
                 alert("Error al procesar la matrícula: " + error.message);
             });
-            */
+            
         }
         
         
         document.addEventListener('DOMContentLoaded', loadHorarios);
         
-     
         document.getElementById('btn-matricular').addEventListener('click', completarMatricula);
     </script>
     </body>

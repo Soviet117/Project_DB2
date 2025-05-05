@@ -15,7 +15,7 @@
     <body>
         <h1>Estas en matricula para que actualices tus datos</h1>
 
-        <div id="mensaje-actualizacion" style="display: none; color: green; font-weight: bold; margin-top: 10px;"></div>
+        <div id="mensaje-actualizacion" style=" color: green; font-weight: bold; margin-top: 10px;">Cargando datos del alumno...</div>
 
         <form id="formulario-matricula">
             <label for="dniI">Documento Nacional de Identidad</label>
@@ -106,8 +106,8 @@
                     } else if (alumno.estado === 'DESACTUALIZADO') {
                         correoInput.placeholder = alumno.correo;
                     }
-                    //depurar
-                    
+                    const cargar = document.getElementById('mensaje-actualizacion');
+                    cargar.style.display = 'none';
                    
                 })
                 .catch(error => {

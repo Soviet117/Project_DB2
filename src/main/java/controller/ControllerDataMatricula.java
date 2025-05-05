@@ -74,6 +74,32 @@ public class ControllerDataMatricula extends HttpServlet{
     
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String path = req.getPathInfo();
+        
+        switch (path) {
+            case "sendAlumno":
+                updateDataAlumno(req,resp);
+                break;
+            case "matricular":
+                
+                break;
+                
+            default:
+                throw new AssertionError();
+        }
+    }
+    
+    protected void matricularAlumno(HttpServletRequest req, HttpServletResponse resp){
+        try {
+            resp.setContentType("application/json");
+            resp.setCharacterEncoding("UTF-8");
+            
+            
+        } catch (Exception e) {
+        }
+    }
+    
+    protected void updateDataAlumno(HttpServletRequest req, HttpServletResponse resp) throws IOException{
         try {
 
             resp.setContentType("application/json");
