@@ -97,7 +97,7 @@ public class AlumnoDAOImpl implements AlumnoDAO{
             
             
         } catch (SQLException e) {
-            
+            correct =  false;
         
         }
        return correct;

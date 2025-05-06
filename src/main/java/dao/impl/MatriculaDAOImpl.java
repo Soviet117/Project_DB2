@@ -55,5 +55,12 @@ public class MatriculaDAOImpl implements MatriculaDAO{
         return horarios;
     }
     
+     @Override
+     public void insertMatricula(int id_alumno, int id_horario, String fecha_matri, String estado){
+         boolean correct = true;
+         
+         
+     }
+    
    
 }
