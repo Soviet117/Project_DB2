@@ -3,6 +3,7 @@ package dao.impl;
 import dao.MatriculaDAO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.CallableStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -56,11 +57,24 @@ public class MatriculaDAOImpl implements MatriculaDAO{
     }
     
      @Override
-     public void insertMatricula(int id_alumno, int id_horario, String fecha_matri, String estado){
-         boolean correct = true;
+     public  boolean insertMatricula(int id_matricula, int id_horario){
+        boolean correct = true;
          
-         
+         try {
+             String sql = "CALL ADIXON.create_matricula_horario("+id_matricula+","+id_horario+")";
+             
+             Connection connection = DatabaseConnection.getConnection();
+             CallableStatement call = connection.prepareCall(sql);
+             call.executeUpdate();
+             
+         } catch (SQLException e) {
+             return false;
+         }
+ 
+         return correct;
      }
     
+     
+     
    
 }

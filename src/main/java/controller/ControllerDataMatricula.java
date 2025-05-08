@@ -5,12 +5,18 @@ import dao.AlumnoDAO;
 import dao.MatriculaDAO;
 import dao.impl.AlumnoDAOImpl;
 import dao.impl.MatriculaDAOImpl;
+import jakarta.json.Json;
+import jakarta.json.JsonArray;
+import jakarta.json.JsonNumber;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonReader;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -77,27 +83,79 @@ public class ControllerDataMatricula extends HttpServlet{
         String path = req.getPathInfo();
         
         switch (path) {
-            case "sendAlumno":
+            case "/sendAlumno":
                 updateDataAlumno(req,resp);
                 break;
-            case "matricular":
-                
+            case "/matricular":
+                matricularAlumno(req,resp);
                 break;
                 
             default:
-                throw new AssertionError();
+                xd();
+                break;
+                
         }
     }
     
-    protected void matricularAlumno(HttpServletRequest req, HttpServletResponse resp){
-        try {
-            resp.setContentType("application/json");
-            resp.setCharacterEncoding("UTF-8");
-            
-            
-        } catch (Exception e) {
-        }
+    private void xd(){
+        System.out.println("Estanendtrando a default");
     }
+    
+    protected void matricularAlumno(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        resp.setContentType("application/json");
+        resp.setCharacterEncoding("UTF-8");
+
+        StringBuilder sb = new StringBuilder();
+        String line;
+        try (BufferedReader reader = req.getReader()) {
+            while ((line = reader.readLine()) != null) {
+                sb.append(line);
+            }
+        }
+
+        String jsonData = sb.toString();
+        
+        boolean correcto = false;
+
+        try (JsonReader jsonReader = Json.createReader(new java.io.StringReader(jsonData))) {
+            JsonObject jsonObject = jsonReader.readObject();
+            JsonArray cursosJsonArray = jsonObject.getJsonArray("cursosIds");
+
+            List<Integer> listaCursosIds = new ArrayList<>();
+            for (int i = 0; i < cursosJsonArray.size(); i++) {
+                // Maneja tanto valores numéricos como strings
+                if (cursosJsonArray.get(i) instanceof JsonNumber) {
+                    listaCursosIds.add(cursosJsonArray.getJsonNumber(i).intValue());
+                } else {
+                    //Aqui se ejecuta toda la logica correcta
+                    listaCursosIds.add(Integer.parseInt(cursosJsonArray.getString(i)));
+                    correcto = matriculaDAO.insertMatricula(1, listaCursosIds.get(i));
+                    
+                }
+            }
+            
+            if(correcto == true){
+                JsonObject responseJson = Json.createObjectBuilder()
+                        .add("success", true)
+                        .add("message", "Matricula ejecutada correctamente.")
+                        .build();
+                      
+
+                resp.getWriter().write(responseJson.toString());
+            
+            }
+
+            System.out.println("Lista de cursos select id: " + listaCursosIds);
+
+
+
+
+        } catch (Exception e) {
+            resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            resp.getWriter().write(Json.createObjectBuilder().add("error", "Error al leer los datos de la petición: " + e.getMessage()).build().toString());
+            e.printStackTrace();
+        }
+}
     
     protected void updateDataAlumno(HttpServletRequest req, HttpServletResponse resp) throws IOException{
         try {
@@ -184,11 +242,11 @@ public class ControllerDataMatricula extends HttpServlet{
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
         
+        alumno = alumnoDAO.loadAlumno(1);
+        
         String estado = alumno.getEstado();
         
         Map<String, String> mensajeJSON = new HashMap<>();
-        
-        
         
         if(estado.equals("ACTUALIZADO")){
             mensajeJSON.put("status", "ACTUALIZADO");

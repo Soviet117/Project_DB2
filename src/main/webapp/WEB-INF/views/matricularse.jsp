@@ -44,6 +44,9 @@
         <button id="btn-matricular" class="btn-matricular">Completar Matrícula</button>
         
     <script>
+        
+        //Para la logica de que no se matricule mas de una vez en un mismo curso
+        //Vas a crear la logica de lajar el ID_CURSO
         let horariosOriginales = [];
         let horariosSeleccionados = [];
         
@@ -82,7 +85,7 @@
             }
             
             horariosOriginales.forEach(horario => {
-                if (!horariosSeleccionados.some(h => h.id_curso === horario.id_curso)) {
+                if (!horariosSeleccionados.some(h => h.id_horario === horario.id_horario)) {
                     addHorarioRow(tabla, horario);
                 }
             });
@@ -104,7 +107,7 @@
             const fila = tabla.insertRow();
             
             const celdaIdCurso = fila.insertCell();
-            celdaIdCurso.textContent = horario.id_curso || '';
+            celdaIdCurso.textContent = horario.id_horario || '';
             
             const celdaNombre = fila.insertCell();
             celdaNombre.textContent = horario.nombreC || '';
@@ -139,7 +142,7 @@
             const fila = tabla.insertRow();
             
             const celdaIdCurso = fila.insertCell();
-            celdaIdCurso.textContent = horario.id_curso || '';
+            celdaIdCurso.textContent = horario.id_horario || '';
             
             const celdaNombre = fila.insertCell();
             celdaNombre.textContent = horario.nombreC || '';
@@ -189,15 +192,9 @@
                 alert("No has seleccionado ningún curso para matricular.");
                 return;
             }
-            
-            
-            const cursosIds = horariosSeleccionados.map(h => h.id_curso);
-            
-            alert("Completando matrícula para los cursos: " + 
-                  horariosSeleccionados.map(h => h.nombreC).join(", ") + 
-                  "\nIDs: " + cursosIds.join(", "));
-            
-            
+
+            const cursosIds = horariosSeleccionados.map(h => h.id_horario);
+
             fetch('${pageContext.request.contextPath}/controllerDataMatricularse/matricular', {
                 method: 'POST',
                 headers: {
@@ -213,19 +210,44 @@
                 return response.json();
             })
             .then(result => {
-                alert("Matrícula completada con éxito!");
+                //div de alerta aksjfanskjf
+                const alertDiv = document.createElement('div');
+                alertDiv.style.position = 'fixed';
+                alertDiv.style.top = '50%';
+                alertDiv.style.left = '50%';
+                alertDiv.style.transform = 'translate(-50%, -50%)';
+                alertDiv.style.backgroundColor = 'white';
+                alertDiv.style.padding = '20px';
+                alertDiv.style.border = '1px solid #ccc';
+                alertDiv.style.borderRadius = '5px';
+                alertDiv.style.boxShadow = '0 0 10px rgba(0,0,0,0.2)';
+                alertDiv.style.zIndex = '1000';
+                alertDiv.style.textAlign = 'center';
+
+                const mensaje = document.createElement('p');
+                mensaje.textContent = result.message;
+                alertDiv.appendChild(mensaje);
+
+                const btnVolver = document.createElement('button');
+                btnVolver.textContent = 'Volver al inicio';
+                btnVolver.style.padding = '8px 15px';
+                btnVolver.style.margin = '10px';
+                btnVolver.style.cursor = 'pointer';
+                btnVolver.onclick = function() {
+                    window.location.href = '${pageContext.request.contextPath}/app/inicio';
+                };
+                alertDiv.appendChild(btnVolver);
+
+                document.body.appendChild(alertDiv);
+
                 
-                horariosSeleccionados = [];
-                
-                loadHorarios();
+
             })
             .catch(error => {
                 console.error("Error al procesar la matrícula:", error);
                 alert("Error al procesar la matrícula: " + error.message);
             });
-            
         }
-        
         
         document.addEventListener('DOMContentLoaded', loadHorarios);
         

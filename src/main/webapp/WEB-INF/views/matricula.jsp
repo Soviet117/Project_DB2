@@ -175,8 +175,7 @@
                     mensajeDiv.style.display = 'block';
                 });
             }
-        
-            
+         
             function verificarEstadoYRedirigir(){
                 event.preventDefault();
                 
