@@ -24,7 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import model.Alumno;
-import model.Horario;
+import model.HorarioMatricula;
 
 /**
  *
@@ -204,32 +204,32 @@ public class ControllerDataMatricula extends HttpServlet{
     }
     
     protected void sendAlumno(HttpServletRequest req,HttpServletResponse resp) throws IOException{
-        try {
-            Alumno alumno = alumnoDAO.loadAlumno(1);
-            id_alumno = alumno.getId_alumno();
-            id_persona = alumno.getId_persona();
-            
-            if (alumno == null) {
-                
-                enviarRespuestaError(resp, "Error: alumno no encontrado");
-            } else {
-                //todo correccto aksjn
-                
-                Map<String, String> alumnoJSON = new HashMap<>();
-                
-                alumnoJSON.put("id_persona", String.valueOf(alumno.getId_persona()));
-                alumnoJSON.put("codido", alumno.getCodigo());
-                alumnoJSON.put("dni", alumno.getDni());
-                alumnoJSON.put("nombres",alumno.getNombres());
-                alumnoJSON.put("apellidos", alumno.getApellidos());
-                alumnoJSON.put("fecha_n", String.valueOf(alumno.getFecha_n()));
-                alumnoJSON.put("numeroT",alumno.getNumeroT());
-                alumnoJSON.put("correo", alumno.getCorreo());
-                alumnoJSON.put("direccion", alumno.getDireccion());
-                alumnoJSON.put("estado", alumno.getEstado());
-                
-                ObjectMapper mapper = new ObjectMapper();
-                resp.getWriter().write(mapper.writeValueAsString(alumnoJSON));
+            try {
+                Alumno alumno = alumnoDAO.loadAlumno(1);
+                id_alumno = alumno.getId_alumno();
+                id_persona = alumno.getId_persona();
+
+                if (alumno == null) {
+
+                    enviarRespuestaError(resp, "Error: alumno no encontrado");
+                } else {
+                    //todo correccto sldkgnsgnsoringofnvk
+
+                    Map<String, String> alumnoJSON = new HashMap<>();
+
+                    alumnoJSON.put("id_persona", String.valueOf(alumno.getId_persona()));
+                    alumnoJSON.put("codido", alumno.getCodigo());
+                    alumnoJSON.put("dni", alumno.getDni());
+                    alumnoJSON.put("nombres",alumno.getNombres());
+                    alumnoJSON.put("apellidos", alumno.getApellidos());
+                    alumnoJSON.put("fecha_n", String.valueOf(alumno.getFecha_n()));
+                    alumnoJSON.put("numeroT",alumno.getNumeroT());
+                    alumnoJSON.put("correo", alumno.getCorreo());
+                    alumnoJSON.put("direccion", alumno.getDireccion());
+                    alumnoJSON.put("estado", alumno.getEstado());
+
+                    ObjectMapper mapper = new ObjectMapper();
+                    resp.getWriter().write(mapper.writeValueAsString(alumnoJSON));
             }
         } catch (Exception e) {
             
@@ -263,13 +263,13 @@ public class ControllerDataMatricula extends HttpServlet{
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
 
-        List<Horario> horarios = matriculaDAO.loadHorarios(id_alumno, alumno.getId_carrera());
+        List<HorarioMatricula> horarios = matriculaDAO.loadHorarios(id_alumno, alumno.getId_carrera());
 
       
         List<Map<String, String>> horariosJSONList = new ArrayList<>();
         System.out.println("Horarios: " + horarios);
 
-        for(Horario h: horarios) {
+        for(HorarioMatricula h: horarios) {
             Map<String, String> horarioJSON = new HashMap<>();
             horarioJSON.put("id_horario", String.valueOf(h.getId_horario()));
             horarioJSON.put("id_curso", String.valueOf(h.getId_curso()));

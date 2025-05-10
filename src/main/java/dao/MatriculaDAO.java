@@ -1,7 +1,7 @@
 package dao;
 
 import java.util.List;
-import model.Horario;
+import model.HorarioMatricula;
 
 /**
  *
@@ -9,7 +9,7 @@ import model.Horario;
  */
 public interface MatriculaDAO {
     
-    List<Horario> loadHorarios(int id_ciclo, int id_carrera);   
+    List<HorarioMatricula> loadHorarios(int id_ciclo, int id_carrera);   
     
     boolean insertMatricula(int id_matricula, int id_horario);
 }

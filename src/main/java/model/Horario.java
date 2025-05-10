@@ -2,38 +2,29 @@ package model;
 
 /**
  *
- * @author Soviet
+ * @author Soivet
  */
 public class Horario {
     private int id_horario;
+    private int id_hora;
+    private int id_dia;
+    private String nom_aula;
     private int id_curso;
-    private String nombreC;
-    private String apellidos;
-    private String nombres;
-    private String aula;
-    private String dia;
-    private String Hinicio;
-    private String Hfin;
-    private int capacidad;
-    private int cupos;
+    private String nom_curso;
+    private String codigo;
     
     public Horario(){
         
     }
 
-    public Horario(int id_horario, int id_curso, String nombreC, String apellidos, String nombres, 
-            String aula, String dia, String Hinicio, String Hfin, int capacidad, int cupos) {
+    public Horario(int id_horario, int id_hora, int id_dia, String nom_aula, int id_curso, String nom_curso, String codigo) {
         this.id_horario = id_horario;
+        this.id_hora = id_hora;
+        this.id_dia = id_dia;
+        this.nom_aula = nom_aula;
         this.id_curso = id_curso;
-        this.nombreC = nombreC;
-        this.apellidos = apellidos;
-        this.nombres = nombres;
-        this.aula = aula;
-        this.dia = dia;
-        this.Hinicio = Hinicio;
-        this.Hfin = Hfin;
-        this.capacidad = capacidad;
-        this.cupos = cupos;
+        this.nom_curso = nom_curso;
+        this.codigo = codigo;
     }
 
     public int getId_horario() {
@@ -44,6 +35,30 @@ public class Horario {
         this.id_horario = id_horario;
     }
 
+    public int getId_hora() {
+        return id_hora;
+    }
+
+    public void setId_hora(int id_hora) {
+        this.id_hora = id_hora;
+    }
+
+    public int getId_dia() {
+        return id_dia;
+    }
+
+    public void setId_dia(int id_dia) {
+        this.id_dia = id_dia;
+    }
+
+    public String getNom_aula() {
+        return nom_aula;
+    }
+
+    public void setNom_aula(String nom_aula) {
+        this.nom_aula = nom_aula;
+    }
+
     public int getId_curso() {
         return id_curso;
     }
@@ -52,85 +67,26 @@ public class Horario {
         this.id_curso = id_curso;
     }
 
-    public String getNombreC() {
-        return nombreC;
+    public String getNom_curso() {
+        return nom_curso;
     }
 
-    public void setNombreC(String nombreC) {
-        this.nombreC = nombreC;
+    public void setNom_curso(String nom_curso) {
+        this.nom_curso = nom_curso;
     }
 
-    public String getApellidos() {
-        return apellidos;
+    public String getCodigo() {
+        return codigo;
     }
 
-    public void setApellidos(String apellidos) {
-        this.apellidos = apellidos;
-    }
-
-    public String getNombres() {
-        return nombres;
-    }
-
-    public void setNombres(String nombres) {
-        this.nombres = nombres;
-    }
-
-    public String getAula() {
-        return aula;
-    }
-
-    public void setAula(String aula) {
-        this.aula = aula;
-    }
-
-    public String getDia() {
-        return dia;
-    }
-
-    public void setDia(String dia) {
-        this.dia = dia;
-    }
-
-    public String getHinicio() {
-        return Hinicio;
-    }
-
-    public void setHinicio(String Hinicio) {
-        this.Hinicio = Hinicio;
-    }
-
-    public String getHfin() {
-        return Hfin;
-    }
-
-    public void setHfin(String Hfin) {
-        this.Hfin = Hfin;
-    }
-
-    public int getCapacidad() {
-        return capacidad;
-    }
-
-    public void setCapacidad(int capacidad) {
-        this.capacidad = capacidad;
-    }
-
-    public int getCupos() {
-        return cupos;
-    }
-
-    public void setCupos(int cupos) {
-        this.cupos = cupos;
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
     }
 
     @Override
     public String toString() {
-        return "Horario{" + "id_horario=" + id_horario + ", id_curso=" + id_curso + ", nombreC=" + nombreC + 
-                ", apellidos=" + apellidos + ", nombres=" + nombres + ", aula=" + aula + ", dia=" + dia + 
-                ", Hinicio=" + Hinicio + ", Hfin=" + Hfin + ", capacidad=" + capacidad + ", cupos=" + cupos + '}';
+        return "Horario{" + "id_horario=" + id_horario + ", id_hora=" + id_hora + ", id_dia=" + id_dia + ", nom_aula=" + nom_aula + ", id_curso=" + id_curso + ", nom_curso=" + nom_curso + ", codigo=" + codigo + '}';
     }
-    
     
     
 }

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import model.Horario;
+import model.HorarioMatricula;
 import util.DatabaseConnection;
 
 /**
@@ -20,8 +20,8 @@ import util.DatabaseConnection;
 public class MatriculaDAOImpl implements MatriculaDAO{
 
     @Override
-    public List<Horario> loadHorarios(int id_ciclo, int id_carrera) {
-        List<Horario> horarios = new ArrayList<>();
+    public List<HorarioMatricula> loadHorarios(int id_ciclo, int id_carrera) {
+        List<HorarioMatricula> horarios = new ArrayList<>();
         
         
         
@@ -45,7 +45,7 @@ public class MatriculaDAOImpl implements MatriculaDAO{
                     int capacidad = rs.getInt(12);
                     int cupos = rs.getInt(13);
                     
-                    horarios.add(new Horario(id_horario, id_curso, nom_curso, ape_profe, nom_profe, nom_aula, nom_dia, hora_ini, hora_fin, capacidad, cupos));
+                    horarios.add(new HorarioMatricula(id_horario, id_curso, nom_curso, ape_profe, nom_profe, nom_aula, nom_dia, hora_ini, hora_fin, capacidad, cupos));
                
             }
             

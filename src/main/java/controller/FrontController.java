@@ -36,6 +36,9 @@ public class FrontController extends HttpServlet{
             case "/matricularse":
                 req.getRequestDispatcher("/WEB-INF/views/matricularse.jsp").forward(req, resp);
                 break;
+            case "/horario":
+                req.getRequestDispatcher("/WEB-INF/views/horario.jsp").forward(req, resp);
+                break;
                     
             default:
                     
