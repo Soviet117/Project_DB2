@@ -9,7 +9,11 @@ import model.HorarioMatricula;
  */
 public interface MatriculaDAO {
     
-    List<HorarioMatricula> loadHorarios(int id_ciclo, int id_carrera);   
+    List<HorarioMatricula> loadHorarios(int id_alumno);
     
-    boolean insertMatricula(int id_matricula, int id_horario);
+    List<HorarioMatricula> loadHorariosM(int id_alumno);
+    
+    boolean insertMatricula(int id_alumno, int id_horario, int id_curso);
+    
+    boolean deleteCursoNoSelect(int id_alumno, int id_horario, int id_curso);
 }

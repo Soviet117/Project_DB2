@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Alumno;
+import oracle.jdbc.OracleTypes;
 import util.DatabaseConnection;
 
 /**
@@ -37,13 +38,15 @@ public class AlumnoDAOImpl implements AlumnoDAO{
         Alumno alumno = new Alumno();
             
         //esto tinee que ser con callanleStatement con PA
-        String sql = "SELECT a.id_alumno, p.id_persona , a.codigo, p.dni, p.apellidos, p.nombres, p.fecha_n, p.telofono, p.correo, p.direccion,a.fecha_ingre, a.password,p.estado ,a.id_ciclo, a.id_carrera " +
-            "FROM ADIXON.alumno a INNER JOIN ADIXON.persona p ON a.id_persona = p.id_persona  " +
-            "WHERE a.id_alumno = "+id_alumno;
-        
-        try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
+                
+        try  {
+            
+            Connection conn = DatabaseConnection.getConnection();
+            CallableStatement call = conn.prepareCall("{CALL ADIXON.LOAD_ALUMNOS(?,?)}");
+            call.registerOutParameter(1, OracleTypes.CURSOR);
+            call.setInt(2, id_alumno);
+            call.execute();
+            ResultSet rs = (ResultSet) call.getObject(1);
             
             while (rs.next()) {
                 

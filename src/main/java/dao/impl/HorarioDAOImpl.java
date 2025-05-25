@@ -1,6 +1,7 @@
 package dao.impl;
 
 import dao.HorarioDAO;
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,6 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Horario;
 import model.HorarioMatricula;
+import oracle.jdbc.OracleTypes;
 import util.DatabaseConnection;
 
 /**
@@ -22,14 +24,14 @@ public class HorarioDAOImpl implements HorarioDAO{
     @Override
     public List<Horario> loadHorarios(int id_alumno) {
         List<Horario> horarios = new ArrayList<>();
-        
-        
-        
-        
-        String sql = "SELECT * FROM ADIXON.view_horario WHERE id_alumno = "+id_alumno;
-        try (Connection connection = DatabaseConnection.getConnection();
-                PreparedStatement stmt = connection.prepareCall(sql);
-                ResultSet rs = stmt.executeQuery()){ 
+        try { 
+            
+            Connection conn = DatabaseConnection.getConnection();
+            CallableStatement call = conn.prepareCall("{CALL ADIXON.LOAD_HORARIO(?,?)}");
+            call.registerOutParameter(1,OracleTypes.CURSOR);
+            call.setInt(2, id_alumno);
+            call.execute();
+            ResultSet rs = (ResultSet) call.getObject(1);
             
             while (rs.next()) {
                     int id_horario = rs.getInt(1);

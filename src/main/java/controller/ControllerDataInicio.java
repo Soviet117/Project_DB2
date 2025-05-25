@@ -9,7 +9,6 @@ import java.io.IOException;
 
 @WebServlet(name = "ControllerDataInicio", urlPatterns = {"/inicio"})
 public class ControllerDataInicio extends HttpServlet {
-    private int id_alumno = -1;
     
     @Override
     public void init() throws ServletException {

@@ -9,6 +9,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,9 +25,6 @@ import model.Horario;
 public class ControllerDataHorario extends HttpServlet{
     private HorarioDAO horarioDAO;
     private List<Horario> horarios;
-    
-    private int id_alumno = 1;
-    
     
     public void init(ServletConfig config) throws ServletException {
         super.init();
@@ -50,42 +48,26 @@ public class ControllerDataHorario extends HttpServlet{
     }
      
      protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        // <editor-fold defaultstate="collapsed" desc="Compiled Code">
-        /* 0: aload_1
-         * 1: invokeinterface #8,  1            // InterfaceMethod jakarta/servlet/http/HttpServletRequest.getProtocol:()Ljava/lang/String;
-         * 6: astore_3
-         * 7: getstatic     #9                  // Field lStrings:Ljava/util/ResourceBundle;
-         * 10: ldc           #20                 // String http.method_post_not_supported
-         * 12: invokevirtual #11                 // Method java/util/ResourceBundle.getString:(Ljava/lang/String;)Ljava/lang/String;
-         * 15: astore        4
-         * 17: aload_2
-         * 18: aload_0
-         * 19: aload_3
-         * 20: invokevirtual #12                 // Method getMethodNotSupportedCode:(Ljava/lang/String;)I
-         * 23: aload         4
-         * 25: invokeinterface #13,  3           // InterfaceMethod jakarta/servlet/http/HttpServletResponse.sendError:(ILjava/lang/String;)V
-         * 30: return
-         *  */
-        // </editor-fold>
+        
     }
      
     protected void loadHorario(HttpServletRequest req, HttpServletResponse resp) throws IOException{
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
         
-        horarios = horarioDAO.loadHorarios(id_alumno);
+        horarios = horarioDAO.loadHorarios(loadId(req, resp));
 
         
-        List<Map<String, Object>> ListHorariosJSON = new ArrayList<>();
+        List<Map<String, String>> ListHorariosJSON = new ArrayList<>();
         
         for(Horario h: horarios){
-            Map<String, Object> horarioJSON = new HashMap<>();
+            Map<String, String> horarioJSON = new HashMap<>();
             
-            horarioJSON.put("id_horario",h.getId_horario());
-            horarioJSON.put("id_hora",h.getId_hora());
-            horarioJSON.put("id_dia",h.getId_dia());
+            horarioJSON.put("id_horario",String.valueOf(h.getId_horario()));
+            horarioJSON.put("id_hora",String.valueOf(h.getId_hora()));
+            horarioJSON.put("id_dia",String.valueOf(h.getId_dia()));
             horarioJSON.put("nom_aula", h.getNom_aula());
-            horarioJSON.put("id_curso",h.getId_curso());
+            horarioJSON.put("id_curso",String.valueOf(h.getId_curso()));
             horarioJSON.put("nom_curso", h.getNom_curso());
             horarioJSON.put("codigo", h.getCodigo());
             
@@ -98,6 +80,57 @@ public class ControllerDataHorario extends HttpServlet{
         
         System.out.println("Aqui estan los cursos en JSON: "+ListHorariosJSON);
         System.out.println("Aqui estan los cursos en DTOs: "+horarios);
+    }
+    
+    protected int loadId(HttpServletRequest req, HttpServletResponse resp) throws IOException{
+        
+        HttpSession session = req.getSession();
+        
+        if(session == null){
+            System.out.println("La berraca session es null, me corto un huevo");
+            sendSessionExpired(resp, "La session a expirado");
+            return -1;
+        }
+        
+        Integer id_A = (Integer)session.getAttribute("id_alumno");
+        if(id_A == null){
+            System.out.println("El berraco ID es null, me corto un huevo");
+            sendSessionExpired(resp, "La session a expirado");
+            return -1;
+        }
+        System.out.println("El id alumno es, desde horario: "+id_A);
+        
+        try {
+            long currentTime = System.currentTimeMillis();
+            long lastAccessTime = session.getLastAccessedTime();
+            int maxInactiveInterval = session.getMaxInactiveInterval();
+            
+            if ((currentTime - lastAccessTime) > (maxInactiveInterval * 1000)) {
+                System.out.println("Sesión expirada manualmente detectada");
+                session.invalidate();
+                sendSessionExpired(resp, "session_expired");
+                return -1;
+            }            
+        } catch (IllegalStateException e) {
+            System.out.println("Sesión ya invalidada: " + e.getMessage());
+            sendSessionExpired(resp, "session_invalidated");
+            return -1;
+        }
+        
+        return id_A;
+    }
+    
+    protected void sendSessionExpired(HttpServletResponse resp, String err) throws IOException{
+        resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        resp.setCharacterEncoding("UTF-8");
+        resp.setContentType("application/json");
+        
+        Map<String, String> JSON = new HashMap<>();
+        JSON.put("error", err);
+        JSON.put("message","No se pudo cargar correctamente el ID");
+        
+        ObjectMapper mapper = new ObjectMapper();
+        resp.getWriter().write(mapper.writeValueAsString(JSON));
     }
     
 }

@@ -22,13 +22,16 @@ public class FrontController extends HttpServlet{
          
         if (path == null) {
             
-            req.getRequestDispatcher("/WEB-INF/views/panel.jsp").forward(req, resp);
+            req.getRequestDispatcher("/WEB-INF/views/login.jsp").forward(req, resp);
             return;
         }
         
         switch (path) {
+            case "/login":
+                req.getRequestDispatcher("/WEB-INF/views/login.jsp").forward(req, resp);
+                break;
             case "/inicio":
-                req.getRequestDispatcher("/WEB-INF/views/panel.jsp").forward(req, resp);
+                req.getRequestDispatcher("/WEB-INF/views/inicio.jsp").forward(req, resp);
                 break;
             case "/matricula":
                 req.getRequestDispatcher("/WEB-INF/views/matricula.jsp").forward(req, resp);
@@ -39,7 +42,9 @@ public class FrontController extends HttpServlet{
             case "/horario":
                 req.getRequestDispatcher("/WEB-INF/views/horario.jsp").forward(req, resp);
                 break;
-                    
+            case "/notas":
+                req.getRequestDispatcher("/WEB-INF/views/notas.jsp").forward(req, resp);
+                break;
             default:
                     
                 throw new AssertionError();
